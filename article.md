@@ -3,7 +3,7 @@ perex: "Ve městech opozice, na venkově ANO. To zas byly volby."
 coverimg: https://interaktivni.rozhlas.cz/brexit/media/cover.jpg
 coverimg_note: "Foto <a href='https://ctk.cz'>ČTK</a>"
 styles: ['https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css']
-libraries: [jquery, 'https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js'] #jquery, d3, highcharts, datatables
+libraries: ['https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js'] #jquery, d3, highcharts, datatables
 options: [noheader, nopic] #wide, noheader (, nopic)
 ---
 

@@ -16,13 +16,6 @@ const attendanceId = 'ucast';
 
 const host = 'https://data.irozhlas.cz';
 
-function getPartyIdLong(id) {
-  if (id === attendanceId) {
-    return id;
-  }
-  return `part_${id}`;
-}
-
 class Map {
   constructor(containerId, centerLng, centerLat, zoom, selectedParty) {
     this.containerId = containerId; // ID of container element
@@ -40,7 +33,8 @@ class Map {
   }
 
   createMap() {
-    const mapContainer = $(this.container).children(`.${mapClass}`); // find child of the container with map class identifier
+    const mapContainer = this.container.querySelectorAll(`.${mapClass}`);
+    // find child of the container with map class identifier
     if (mapContainer.length === 0) {
       throw new Error(`Element with class ${mapClass} missing from map container with id ${this.containerId}`);
     }
@@ -67,7 +61,7 @@ class Map {
     this.map.scrollZoom.disable();
 
     this.map.addControl(new maplibregl.NavigationControl());
-    this.map.addControl(new gCoder(), 'top-left');
+    this.map.addControl(new Gcoder(), 'top-left');
     this.addEvents();
     this.createSelector();
     this.createLegend();
@@ -211,7 +205,7 @@ class PartySelector {
   }
 }
 
-class gCoder {
+class Gcoder {
   onAdd(map) {
     this._map = map;
     this._container = document.createElement('div');
@@ -243,12 +237,17 @@ class gCoder {
     ];
     this._map = map;
     const response = await fetch(`https://api.mapy.cz/geocode?query=${input}`);
-    const data = await response.text();
-    if ($(data).find('item').attr('x') === undefined) {
+    const dataText = await response.text();
+    const data = (new window.DOMParser()).parseFromString(dataText, 'text/xml');
+    const res = data.firstChild.children[0];
+    if (res.children.length === 0) {
+      map.fitBounds(crBounds);
+    }
+    if (res.children[0].attributes.x === undefined) {
       map.fitBounds(crBounds);
     } else {
-      const x = parseFloat($(data).find('item').attr('x'));
-      const y = parseFloat($(data).find('item').attr('y'));
+      const x = parseFloat(res.children[0].attributes.x.value);
+      const y = parseFloat(res.children[0].attributes.y.value);
       if (x < 12 || x > 19 || y < 48 || y > 52) { // limit coordinates to CR only (approximately)
         map.fitBounds(crBounds);
       } else {
