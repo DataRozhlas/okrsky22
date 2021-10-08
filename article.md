@@ -13,13 +13,11 @@ Cheeseburger ricotta jarlsberg. Mascarpone the big cheese say cheese cheeseburge
 
 <div id="map1" class="container" data-center-lng="14.10285088807273" data-center-lat="50.14733556497221" data-zoom="12" data-party="part_30">
 	<div class="selector"></div>
-	<div class="finder"></div>
 	<div class="legend"></div>
 <div class="map"></div></div>
 
 <div id="map2" class="container" data-center-lng="" data-center-lat="" data-zoom="" data-party="">
 	<div class="selector"> </div>
-	<div class="finder"></div>
 	<div class="legend"></div>
 	<div class="map"></div>
 </div>

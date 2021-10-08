@@ -13,12 +13,12 @@ const hundredPercentColor = '#a50f15';
 // party color palettess
 const partyColors = {
   part_30: ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'], // ANO
-  part_5: ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#3182bd', '#08519c'], // ODS
-  part_27: ['#edf8e9', '#c7e9c0', '#a1d99b', '#74c476', '#31a354', '#006d2c'], // Pirati
-  part_26: ['#f1eef6', '#d4b9da', '#c994c7', '#df65b0', '#dd1c77', '#980043'], // STAN
+  part_5: ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#3182bd', '#08519c'], // SPOLU
+  part_27: ['#edf8e9', '#c7e9c0', '#a1d99b', '#74c476', '#31a354', '#006d2c'], // PirSTAN
   part_28: ['#ffffd4', '#fee391', '#fec44f', '#fe9929', '#d95f0e', '#993404'], // SPD
-  part_39: ['#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'], // KDU
+  part_39: ['#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'], // Prisaha
   part_9: ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'], // KSCM
+  part_26: ['#f1eef6', '#d4b9da', '#c994c7', '#df65b0', '#dd1c77', '#980043'], // CSSD
 };
 
 function getPartyColor(partyIdLong, idx) {

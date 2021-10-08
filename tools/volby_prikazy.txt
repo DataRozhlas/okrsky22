@@ -1,0 +1,8 @@
+vfr2ogr --file 20211003_ST_UVOH.xml.zip --format GPKG --layer VolebniOkrsek --geom OriginalniHranice --dsn okrsky.gpkg
+---------------
+
+tippecanoe -o ./scratch/tiles.mbtiles -zg -pk -pC -pS -pt ./data/data.json
+
+mb-util ./scratch/tiles.mbtiles ../tiles --image_format=pbf
+
+aws s3 cp ../tiles s3://datarozhlas/okrsky21/tiles --recursive --acl public-read

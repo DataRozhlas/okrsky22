@@ -64,6 +64,8 @@ class Map {
       this.map.fitBounds(crBounds);
     }
 
+    this.map.scrollZoom.disable();
+
     this.map.addControl(new maplibregl.NavigationControl());
     this.map.addControl(new gCoder(), 'top-left');
     this.addEvents();
@@ -133,7 +135,7 @@ class MapLegend {
     this.container = container;
     this.map = map;
     this.legend = null;
-    this.baseText = 'Vyberte okrsek v mapě.';
+    this.baseText = 'Vyberte okrsek v mapě.<br>&nbsp;';
     this.text = this.baseText;
   }
 
