@@ -1,3 +1,19 @@
 .map {
     height: 300px;
 }
+
+.gcode_form{
+    width: auto;
+    height: auto;
+    padding: 3px;
+    background-color: white;
+}
+
+.gcode_form input {
+    width: auto;
+    display: inline-block;
+}
+
+.gcode_form button {
+    display: inline-block;
+}

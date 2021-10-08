@@ -1,4 +1,5 @@
-﻿/* eslint-disable class-methods-use-this */
+﻿/* eslint-disable no-underscore-dangle */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-undef */
 /* eslint-disable max-classes-per-file */
 import './byeie'; // loučíme se s IE
@@ -9,7 +10,6 @@ import { parties, getPartyShortName, getPartyLongName } from './parties'; // lis
 const mapClass = 'map';
 const selectorClass = 'selector';
 const mapContainerClass = 'container';
-const geocodeFinderClass = 'finder';
 const maplegendClass = 'legend';
 
 const attendanceId = 'ucast';
@@ -56,11 +56,19 @@ class Map {
       attributionControl: false,
     });
 
+    if (this.centerLng === '') {
+      const crBounds = [
+        [12.0, 48.55],
+        [18.85, 51.06],
+      ];
+      this.map.fitBounds(crBounds);
+    }
+
     this.map.addControl(new maplibregl.NavigationControl());
+    this.map.addControl(new gCoder(), 'top-left');
     this.addEvents();
     this.createSelector();
     this.createLegend();
-    this.createGeocoder();
   }
 
   getContainer(className) {
@@ -118,25 +126,6 @@ class Map {
     this.selector = new PartySelector(selContainer, this, this.selectedParty);
     this.selector.create();
   }
-
-  createGeocoder() {
-    const geoContainer = this.getContainer(geocodeFinderClass);
-    this.geocoder = new GeocodeFinder(geoContainer, this);
-    this.geocoder.create();
-  }
-
-  moveTo(coorList, zoom = null) {
-    if (coorList === null) {
-      this.moveToCenter();
-    } else {
-      zoom = zoom == null ? this.zoom : zoom;
-      this.map.flyTo({ center: coorList, zoom });
-    }
-  }
-
-  moveToCenter() {
-    this.map.flyTo({ center: [this.centerLng, this.centerLat], zoom: this.zoom });
-  }
 }
 
 class MapLegend {
@@ -162,7 +151,7 @@ class MapLegend {
   update(regionData, displayedParty) {
     if (regionData == null) { // region doesn't have voting data - display placeholder
       this.setText(this.baseText);
-    } else if (displayedParty == attendanceId) { // display attendance in region
+    } else if (displayedParty === attendanceId) { // display attendance in region
       this.setText(this.getAttendanceText(regionData));
     } else { // display party result
       this.setText(this.getPartyText(regionData, displayedParty));
@@ -220,41 +209,48 @@ class PartySelector {
   }
 }
 
-class GeocodeFinder {
-  constructor(container, map) {
-    this.container = container;
-    this.map = map;
+class gCoder {
+  onAdd(map) {
+    this._map = map;
+    this._container = document.createElement('div');
+    this._container.className = 'mapboxgl-ctrl-group mapboxgl-ctrl gcode_form';
 
-    this.placeholderText = 'Vyhledejte obec či adresu na mapě';
-    this.submitButtonText = 'Najít';
-    this.findZoom = 12;
+    const inp = document.createElement('input');
+    inp.setAttribute('type', 'text');
+    inp.setAttribute('placeholder', 'Vyhledejte obec či adresu v mapě');
+    inp.setAttribute('size', inp.getAttribute('placeholder').length + 1);
+    this._container.append(inp);
+
+    const butt = document.createElement('button');
+    butt.textContent = '🔍';
+    butt.addEventListener('click', () => this.findAndMove(inp.value, this._map));
+    this._container.append(butt);
+
+    return this._container;
   }
 
-  create() {
-    const geocodeContainer = $(this.container);
-    const form = $('<form></form>');
-    form.append(`<input class="text" type="text" placeholder="${this.placeholderText}">`);
-    form.append(`<input type="submit" value="${this.submitButtonText}">`);
-    form.submit((event) => {
-      event.preventDefault();
-      const textInput = $(event.currentTarget).children('.text').val();
-      this.findAndMove(textInput);
-    });
-    geocodeContainer.append(form);
+  onRemove() {
+    this._container.parentNode.removeChild(this._container);
+    this._map = undefined;
   }
 
-  async findAndMove(input) {
+  async findAndMove(input, map) {
+    const crBounds = [
+      [12.0, 48.55],
+      [18.85, 51.06],
+    ];
+    this._map = map;
     const response = await fetch(`https://api.mapy.cz/geocode?query=${input}`);
     const data = await response.text();
     if ($(data).find('item').attr('x') === undefined) {
-      this.map.moveToCenter();
+      map.fitBounds(crBounds);
     } else {
       const x = parseFloat($(data).find('item').attr('x'));
       const y = parseFloat($(data).find('item').attr('y'));
       if (x < 12 || x > 19 || y < 48 || y > 52) { // limit coordinates to CR only (approximately)
-        this.map.moveToCenter();
+        map.fitBounds(crBounds);
       } else {
-        this.map.moveTo([x, y], this.findZoom);
+        this._map.flyTo({ center: [x, y], zoom: 12 });
       }
     }
   }
@@ -273,9 +269,9 @@ class MapEmbedder {
     const containers = document.getElementsByClassName(mapContainerClass);
     for (const container of containers) {
       const { id } = container;
-      const centerLng = container.dataset.centerLng ? container.dataset.centerLng : this.defaultLng;
-      const centerLat = container.dataset.centerLat ? container.dataset.centerLat : this.defaultLat;
-      const zoom = container.dataset.zoom ? container.dataset.zoom : this.defaultZoom;
+      const centerLng = container.dataset.centerLng;
+      const centerLat = container.dataset.centerLat;
+      const zoom = container.dataset.zoom;
       const party = container.dataset.party ? container.dataset.party : this.defaultParty;
       const map = new Map(id, centerLng, centerLat, zoom, party);
       map.createMap();
