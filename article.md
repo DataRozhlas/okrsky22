@@ -1,28 +1,33 @@
-title: "Data z mobilů:<br>Praha se denně nafoukne o polovinu, v centru jsou návštěvníci v převaze"
-perex: "Skoro 140 tisíc lidí přijede do Prahy každý den za prací. Míří hlavně do kancelářských budov a do centra města. S nimi pak dorazí i přes půl milionu návštěvníků. Ukázala to analýza dat o pohybu mobilních telefonů, kterou si nyní město nechává zpracovat."
+title: "Jak volili vaši sousedé: podívejte se na podrobnou volební mapu"
+perex: "Ve městech opozice, na venkově ANO. To zas byly volby."
 coverimg: https://interaktivni.rozhlas.cz/brexit/media/cover.jpg
 coverimg_note: "Foto <a href='https://ctk.cz'>ČTK</a>"
-styles: []
-libraries: [] #jquery, d3, highcharts, datatables
-options: [noheader] #wide, noheader (, nopic)
+styles: ['https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.css']
+libraries: [jquery, 'https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js'] #jquery, d3, highcharts, datatables
+options: [noheader, nopic] #wide, noheader (, nopic)
 ---
-<left>
-	<p>
-	<b>KAREL HYNEK MÁCHA</b>
-	</p><p>
-	Karel Hynek Mácha (16. listopadu 1810 Praha-Malá Strana[1] – 6. listopadu 1836 Litoměřice[2]) byl český básník a prozaik, představitel českého romantismu a zakladatel moderní české poezie. Proslavil se jak svým životem, tak dílem, jemuž dominuje Máj (1836).
-	</p>
-</left>
 
-Během dne se lidé v Praze soustřeďují v okolí administrativních center a obchodů, po poledni se tak nejvíc zahustí okolí Andělu, centrum Prahy (Vodičkova ulice a Petrské náměstí) a Brumlovka nedaleko Budějovické. Na poslední jmenované adrese sídlí řada velkých korporací, mezi nimi i Microsoft nebo ČEZ. Pro srovnání, na zmíněných místech je ve "špičce" okolo šesti stovek osob na jeden hektar, průměr Prahy je 25 obyvatel na [hektar](https://cs.wikipedia.org/wiki/Hektar) (Václavské náměstí má rozlohu asi 4 hektary).
+Cheeseburger ricotta jarlsberg. Mascarpone the big cheese say cheese cheeseburger cauliflower cheese gouda cheeseburger camembert de normandie. Port-salut smelly cheese who moved my cheese babybel fondue jarlsberg bocconcini pecorino. Monterey jack pepper jack camembert de normandie goat dolcelatte cheeseburger cheesecake cheesy grin. Smelly cheese stinking bishop.
 
-Naopak v noci se nejvíc lidí se "namačká" ve Vršovicích, jde o 430 osob na hektar.
+<wide>
 
-Detaily si můžete prohlédnout v následující mapě, kterou z dat mobilních operátorů zpracoval pražský [Institut plánování a rozvoje](http://www.iprpraha.cz/).
+<div id="map1" class="container" data-center-lng="14.10285088807273" data-center-lat="50.14733556497221" data-zoom="12" data-party="part_30">
+	<div class="selector"></div>
+	<div class="finder"></div>
+	<div class="legend"></div>
+<div class="map"></div></div>
 
-<wide><i>Pokud vás zajímá, "kolik" lidí bývá ve dne a v noci ve vaší čtvrti, najděte si ji na mapě, přepněte se na časové řezy, vyberte přepínač hustota osob a potom pohybujte "posuvníkem" nahoře.</i></wide>
+<div id="map2" class="container" data-center-lng="" data-center-lat="" data-zoom="" data-party="">
+	<div class="selector"> </div>
+	<div class="finder"></div>
+	<div class="legend"></div>
+	<div class="map"></div>
+</div>
 
-## Data na prodej
+</wide>
+
+Emmental parmesan fromage. Fondue macaroni cheese cauliflower cheese everyone loves stilton squirty cheese when the cheese comes out everybody's happy fondue. Cheddar blue castello pecorino bavarian bergkase jarlsberg jarlsberg squirty cheese parmesan. Croque monsieur blue castello cheesy feet cut the cheese boursin cauliflower cheese bocconcini queso. Rubber cheese red leicester camembert de normandie.
+
 <right>
 	<p>
 	<b>KAREL HYNEK MÁCHA</b>
@@ -31,8 +36,4 @@ Detaily si můžete prohlédnout v následující mapě, kterou z dat mobilních
 	</p>
 </right>
 
-I pokud netelefonujeme nebo neposíláme SMS, telefon pravidelně komunikuje s vysílači v síti mobilního operátora. Z dat o síle signálu a použité anténě je možné odvodit, kde se přibližně telefon nachází a jak dlouhou dobu na místě strávil.
-
-Mobilní operátor má ["zákonnou povinnost"](https://www.zakonyprolidi.cz/cs/2005-127/zneni-20160919#p97-3) takové informace uchovávat, a to půl roku do minulosti, přistupovat k nim ale mohou jen bezpečnostní složky, typicky policie nebo rozvědka.
-
-Operátoři ale obdobné informace mohou anonymizovat (tedy "zbavit" identifikace konkrétního uživatele) a agregovat, tedy spojit informace o jednotlivcích do jakýchsi skupin. Výsledná obecná čísla pak přeprodávají dál, například marketingovým firmám či dopravním analytikům. Zpětně z nich nejde dovodit, kde se pohybuje každý jednotlivec, dávají ale určitý přehled o obecném chování obyvatel nějakého místa.
+Smelly cheese ricotta cheddar. Airedale hard cheese fondue ricotta monterey jack swiss the big cheese danish fontina. Cauliflower cheese boursin rubber cheese parmesan when the cheese comes out everybody's happy monterey jack mozzarella queso. Cheesy feet manchego.
