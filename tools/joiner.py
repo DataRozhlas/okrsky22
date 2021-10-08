@@ -8,7 +8,7 @@ ns = '{http://www.volby.cz/ps/}'
 partaje = {}
 part_data = ET.parse('./data/psrkl.xml').getroot()
 for row in part_data:
-    partaje[row.find(ns + 'KSTRANA').text] = {
+    partaje['part_' + row.find(ns + 'KSTRANA').text] = {
         'naz': row.find(ns + 'ZKRATKAK30').text,
         'zkr': row.find(ns + 'ZKRATKAK8').text,
     }

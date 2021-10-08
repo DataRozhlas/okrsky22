@@ -90,7 +90,7 @@ class Map {
       type: 'fill',
       source: {
         type: 'vector',
-        tiles: [`${host}/eu-19-okrsky/tiles/{z}/{x}/{y}.pbf`],
+        tiles: [`${host}/okrsky21/tiles/{z}/{x}/{y}.pbf`],
       },
       'source-layer': 'data',
       paint: {
