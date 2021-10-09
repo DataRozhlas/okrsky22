@@ -161,7 +161,10 @@ class MapLegend {
   getAttendanceText(regionData) {
     // accuracy to one decimal place
     const attendance = Math.round((regionData.properties.hlasy_platne / regionData.properties.zapsani) * 1000) / 10 || 0;
-    const text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${attendance} %</b> (${regionData.properties.hlasy_platne} z ${regionData.properties.zapsani} zapsaných voličů)`;
+    let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${attendance} %</b> (${regionData.properties.hlasy_platne} z ${regionData.properties.zapsani} zapsaných voličů)`;
+    if (typeof regionData.properties.hlasy_platne === 'undefined') {
+      text = 'Okrsek zatím není sečtený.<br>&nbsp';
+    }
     return text;
   }
 
@@ -169,7 +172,10 @@ class MapLegend {
     // accuracy to one decimal place
     const partyVotes = regionData.properties[partyId] || 0;
     const result = Math.round((partyVotes / regionData.properties.hlasy_platne) * 1000) / 10;
-    const text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.hlasy_platne} platnýc hlasů)`;
+    let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.hlasy_platne} platných hlasů)`;
+    if (typeof regionData.properties.hlasy_platne === 'undefined') {
+      text = 'Okrsek zatím není sečtený.<br>&nbsp';
+    }
     return text;
   }
 }
@@ -242,7 +248,7 @@ class Gcoder {
     this._container.append(inp);
 
     const butt = document.createElement('button');
-    butt.textContent = '🔍';
+    butt.textContent = 'Hledat';
     butt.addEventListener('click', () => this.findAndMove(inp.value, this._map));
     this._container.append(butt);
 

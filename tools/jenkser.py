@@ -46,3 +46,7 @@ for okrs in d['features']:
 # %%
 casp = jenks.jenksCaspall(v, 6, 3, initStyle='kpp')
 print(list(map(lambda x: round(x, 4), casp.breaks)))
+
+# %%
+
+# %%
