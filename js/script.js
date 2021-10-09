@@ -4,13 +4,16 @@
 /* eslint-disable max-classes-per-file */
 import './byeie'; // loučíme se s IE
 import { staticStyleUrl, getMapLayerStyle } from './style'; // import stylu
-import { parties, getPartyShortName, getPartyLongName } from './parties'; // list of all parties (now using old one)
+import { parties, getPartyShortName, getPartyLongName } from './parties'; // list of all parties
+import { breaks } from './breaks';
+import { basicColors, partyColors } from './style'; // list of all parties
 
 // class identifiers in html
 const mapClass = 'map';
 const selectorClass = 'selector';
 const mapContainerClass = 'container';
 const maplegendClass = 'legend';
+const mapscaleClass = 'scale';
 
 const attendanceId = 'ucast';
 
@@ -119,7 +122,8 @@ class Map {
 
   createSelector() {
     const selContainer = this.getContainer(selectorClass);
-    this.selector = new PartySelector(selContainer, this, this.selectedParty);
+    const scaleContainer = this.getContainer(mapscaleClass);
+    this.selector = new PartySelector(selContainer, this, this.selectedParty, scaleContainer);
     this.selector.create();
   }
 }
@@ -134,7 +138,7 @@ class MapLegend {
   }
 
   create() {
-    this.legend = document.createElement('p');
+    this.legend = document.createElement('div');
     this.legend.innerHTML = this.text;
     this.container.appendChild(this.legend);
   }
@@ -163,17 +167,19 @@ class MapLegend {
 
   getPartyText(regionData, partyId) {
     // accuracy to one decimal place
-    const result = Math.round((regionData.properties[partyId] / regionData.properties.hlasy_platne) * 1000) / 10 || 0;
-    const text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${result} %</b> (${regionData.properties[partyId]} z ${regionData.properties.hlasy_platne} platnýc hlasů)`;
+    const partyVotes = regionData.properties[partyId] || 0;
+    const result = Math.round((partyVotes / regionData.properties.hlasy_platne) * 1000) / 10;
+    const text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.hlasy_platne} platnýc hlasů)`;
     return text;
   }
 }
 
 class PartySelector {
-  constructor(container, map, selectedParty) {
+  constructor(container, map, selectedParty, scaleContainer) {
     this.container = container;
     this.map = map;
     this.selected = selectedParty;
+    this.scale = scaleContainer;
   }
 
   createOption(partyId) {
@@ -183,17 +189,31 @@ class PartySelector {
     return option;
   }
 
+  makeScale() {
+    const scaleDiv = document.createElement('div');
+    scaleDiv.setAttribute('class', 'scale-holder');
+    const brks = breaks[this.selected];
+    const clrs = partyColors[this.selected] || basicColors;
+    brks.forEach((brk, i) => {
+      scaleDiv.innerHTML += `<div><span style="background-color: ${clrs[i]}"></span>${Math.round(brk * 1000) / 10} %</div>`;
+    });
+    return scaleDiv;
+  }
+
   create() {
     const selector = document.createElement('select');
-    var option = this.createOption(attendanceId);
+    const option = this.createOption(attendanceId);
     selector.appendChild(option);
     for (const partyId in parties) {
-      var option = this.createOption(partyId);
-      selector.appendChild(option);
+      const opt = this.createOption(partyId);
+      selector.appendChild(opt);
     }
     this.container.appendChild(selector);
     this.addEvents(selector);
     selector.value = this.selected; // change default party to selected party
+
+    // makes scale
+    this.scale.appendChild(this.makeScale(this.selected));
   }
 
   addEvents(selector) {
@@ -201,6 +221,10 @@ class PartySelector {
       const selVal = event.currentTarget.selectedOptions[0].value;
       this.map.changeLayer(selVal);
       this.selected = selVal;
+
+      // change scale on party change
+      this.scale.innerHTML = '';
+      this.scale.appendChild(this.makeScale(this.selected));
     });
   }
 }

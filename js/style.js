@@ -3,7 +3,7 @@ import { breaks } from './breaks'; // percentage breaks for parties (now using o
 const staticStyleUrl = 'https://data.irozhlas.cz/mapa-domu/map_styl/style.json';
 
 // colors for parties without specified color palette and for attendance
-const basicColors = ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'];
+export const basicColors = ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'];
 
 // color for the first break - same for everyone
 const zeroPercentColor = '#f2f0f7';
@@ -11,7 +11,7 @@ const zeroPercentColor = '#f2f0f7';
 const hundredPercentColor = '#a50f15';
 
 // party color palettess
-const partyColors = {
+export const partyColors = {
   part_20: ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'], // ANO
   part_13: ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#3182bd', '#08519c'], // SPOLU
   part_17: ['#edf8e9', '#c7e9c0', '#a1d99b', '#74c476', '#31a354', '#006d2c'], // PirSTAN
