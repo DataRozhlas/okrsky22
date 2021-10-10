@@ -135,6 +135,7 @@ class MapLegend {
     this.legend = null;
     this.baseText = 'Vyberte okrsek v mapě.<br>&nbsp;';
     this.text = this.baseText;
+    this.lastRegionData = null;
   }
 
   create() {
@@ -149,12 +150,17 @@ class MapLegend {
   }
 
   update(regionData, displayedParty) {
-    if (regionData == null) { // region doesn't have voting data - display placeholder
+    if (regionData === null) {
+      regionData = this.lastRegionData;
+    }
+    if (regionData === null) { // region doesn't have voting data - display placeholder
       this.setText(this.baseText);
     } else if (displayedParty === attendanceId) { // display attendance in region
       this.setText(this.getAttendanceText(regionData));
+      this.lastRegionData = regionData;
     } else { // display party result
       this.setText(this.getPartyText(regionData, displayedParty));
+      this.lastRegionData = regionData;
     }
   }
 
@@ -231,6 +237,9 @@ class PartySelector {
       // change scale on party change
       this.scale.innerHTML = '';
       this.scale.appendChild(this.makeScale(this.selected));
+
+      // redraw legend on party change
+      this.map.legend.update(null, this.selected);
     });
   }
 }
