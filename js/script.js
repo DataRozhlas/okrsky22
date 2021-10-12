@@ -53,6 +53,10 @@ class Map {
       attributionControl: false,
     });
 
+    this.map.addControl(new maplibregl.AttributionControl({
+      customAttribution: 'data <a target="_blank" href="https://volby.cz/">ČSÚ</a>',
+    }));
+
     if (this.centerLng === '') {
       const crBounds = [
         [12.0, 48.55],
@@ -62,6 +66,8 @@ class Map {
     }
 
     this.map.scrollZoom.disable();
+
+
 
     this.map.addControl(new maplibregl.NavigationControl());
     this.map.addControl(new Gcoder(), 'top-left');
