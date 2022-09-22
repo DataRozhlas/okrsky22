@@ -5,4 +5,4 @@ tippecanoe -o ./scratch/tiles.mbtiles -zg -pk -pC -pS -pt ./data/data.json
 
 mb-util ./scratch/tiles.mbtiles ../tiles --image_format=pbf
 
-aws s3 cp ../tiles s3://datarozhlas/okrsky21/tiles --recursive --acl public-read
+aws s3 cp ../tiles s3://datarozhlas/okrsky22/tiles --recursive --acl public-read
