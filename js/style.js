@@ -12,12 +12,12 @@ const hundredPercentColor = '#a50f15';
 
 // party color palettess
 export const partyColors = {
-  part_20: ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'], // ANO
+  HL_ANO: ['#f2f0f7', '#dadaeb', '#bcbddc', '#9e9ac8', '#756bb1', '#54278f'], // ANO
   part_13: ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#3182bd', '#08519c'], // SPOLU
   part_17: ['#edf8e9', '#c7e9c0', '#a1d99b', '#74c476', '#31a354', '#006d2c'], // PirSTAN
-  part_4: ['#ffffd4', '#fee391', '#fec44f', '#fe9929', '#d95f0e', '#993404'], // SPD
+  HL_SPD: ['#ffffd4', '#fee391', '#fec44f', '#fe9929', '#d95f0e', '#993404'], // SPD
   part_12: ['#feebe2', '#fcc5c0', '#fa9fb5', '#f768a1', '#c51b8a', '#7a0177'], // Prisaha
-  part_18: ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'], // KSCM
+  HL_KSČM: ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'], // KSCM
   part_5: ['#f1eef6', '#d4b9da', '#c994c7', '#df65b0', '#dd1c77', '#980043'], // CSSD
 };
 
@@ -31,17 +31,16 @@ function getPartyColor(partyIdLong, idx) {
 function getAttendanceStyle(partyIdLong) {
   const style = [
     'case',
-    ['has', 'zapsani'],
+    ['has', 'ZAPSANI_VOLICI'],
     [
       'interpolate',
       ['linear'],
-      ['/', ['get', 'hlasy_platne'], ['get', 'zapsani']],
+      ['/', ['get', 'PLATNE_HLASY'], ['get', 'ZAPSANI_VOLICI']],
       0, zeroPercentColor,
       breaks[partyIdLong][0], getPartyColor(partyIdLong, 0),
       breaks[partyIdLong][1], getPartyColor(partyIdLong, 1),
       breaks[partyIdLong][2], getPartyColor(partyIdLong, 2),
       breaks[partyIdLong][3], getPartyColor(partyIdLong, 3),
-      breaks[partyIdLong][4], getPartyColor(partyIdLong, 4),
       1.0, hundredPercentColor,
     ],
     'white',
@@ -56,13 +55,12 @@ function getPartyStyle(partyIdLong) {
     [
       'interpolate',
       ['linear'],
-      ['/', ['get', partyIdLong], ['get', 'hlasy_platne']],
+      ['/', ['get', partyIdLong], ['get', 'PLATNE_HLASY']],
       0, zeroPercentColor,
       breaks[partyIdLong][0], getPartyColor(partyIdLong, 0),
       breaks[partyIdLong][1], getPartyColor(partyIdLong, 1),
       breaks[partyIdLong][2], getPartyColor(partyIdLong, 2),
       breaks[partyIdLong][3], getPartyColor(partyIdLong, 3),
-      breaks[partyIdLong][4], getPartyColor(partyIdLong, 4),
       1.0, hundredPercentColor,
     ],
     'white',
@@ -71,7 +69,7 @@ function getPartyStyle(partyIdLong) {
 }
 
 function getMapLayerStyle(partyIdLong) {
-  if (partyIdLong === 'ucast') {
+  if (partyIdLong === 'UCAST') {
     return getAttendanceStyle(partyIdLong);
   }
   return getPartyStyle(partyIdLong);

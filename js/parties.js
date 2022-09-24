@@ -5,10 +5,11 @@ function getPartyShortName(partyId) {
 }
 
 function getPartyLongName(partyId) {
-  if (partyId === 'ucast') {
+  if (partyId === 'UCAST') {
     return 'Účast';
   }
-  return parties[partyId].naz;
+  return partyId
+  //return parties[partyId].naz;
 }
 
 export { parties, getPartyShortName, getPartyLongName };

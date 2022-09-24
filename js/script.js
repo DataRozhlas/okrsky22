@@ -2,11 +2,11 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-undef */
 /* eslint-disable max-classes-per-file */
-import './byeie'; // loučíme se s IE
-import { staticStyleUrl, getMapLayerStyle } from './style'; // import stylu
-import { parties, getPartyShortName, getPartyLongName } from './parties'; // list of all parties
+import {
+  staticStyleUrl, getMapLayerStyle, basicColors, partyColors,
+} from './style'; // import stylu
+// import { parties, getPartyShortName, getPartyLongName } from './parties'; // list of all parties
 import { breaks } from './breaks';
-import { basicColors, partyColors } from './style'; // list of all parties
 
 // class identifiers in html
 const mapClass = 'map';
@@ -15,9 +15,14 @@ const mapContainerClass = 'container';
 const maplegendClass = 'legend';
 const mapscaleClass = 'scale';
 
-const attendanceId = 'ucast';
+const attendanceId = 'UCAST';
 
-const host = 'https://data.irozhlas.cz';
+let host = 'https://data.irozhlas.cz';
+
+// for local testing
+if (window.location.host === 'localhost') {
+  host = 'http://localhost';
+}
 
 class Map {
   constructor(containerId, centerLng, centerLat, zoom, selectedParty) {
@@ -67,8 +72,6 @@ class Map {
 
     this.map.scrollZoom.disable();
 
-
-
     this.map.addControl(new maplibregl.NavigationControl());
     this.map.addControl(new Gcoder(), 'top-left');
     this.addEvents();
@@ -89,13 +92,13 @@ class Map {
 
   addInitialLayer() {
     this.map.addLayer({
-      id: 'data',
+      id: 'map',
       type: 'fill',
       source: {
         type: 'vector',
-        tiles: [`${host}/okrsky21/tiles/{z}/{x}/{y}.pbf`],
+        tiles: [`${host}/okrsky22/tiles/{z}/{x}/{y}.pbf`],
       },
-      'source-layer': 'data',
+      'source-layer': 'map',
       paint: {
         'fill-color': getMapLayerStyle(this.selectedParty),
         'fill-opacity': 0.8,
@@ -106,7 +109,7 @@ class Map {
 
   changeLayer(partyIdLong) {
     const style = getMapLayerStyle(partyIdLong);
-    this.map.setPaintProperty('data', 'fill-color', style);
+    this.map.setPaintProperty('map', 'fill-color', style);
   }
 
   addEvents() {
@@ -114,7 +117,7 @@ class Map {
 
     // update legend on mouse move
     this.map.on('mousemove', (e) => {
-      const data = this.map.queryRenderedFeatures(e.point, { layers: ['data'] });
+      const data = this.map.queryRenderedFeatures(e.point, { layers: ['map'] });
       const regionData = data.length === 0 ? null : data[0];
       this.legend.update(regionData, this.selector.selected);
     });
@@ -172,9 +175,9 @@ class MapLegend {
 
   getAttendanceText(regionData) {
     // accuracy to one decimal place
-    const attendance = Math.round((regionData.properties.hlasy_platne / regionData.properties.zapsani) * 1000) / 10 || 0;
-    let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${attendance} %</b> (${regionData.properties.hlasy_platne} z ${regionData.properties.zapsani} zapsaných voličů)`;
-    if (typeof regionData.properties.hlasy_platne === 'undefined') {
+    const attendance = Math.round((regionData.properties.ODEVZDANE_OBALKY / regionData.properties.ZAPSANI_VOLICI) * 1000) / 10 || 0;
+    let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.Obec}</b><br><b>${attendance} %</b> (${regionData.properties.ODEVZDANE_OBALKY} z ${regionData.properties.ZAPSANI_VOLICI} zapsaných voličů)`;
+    if (typeof regionData.properties.PLATNE_HLASY === 'undefined') {
       text = 'Okrsek zatím není sečtený.<br>&nbsp';
     }
     return text;
@@ -183,9 +186,9 @@ class MapLegend {
   getPartyText(regionData, partyId) {
     // accuracy to one decimal place
     const partyVotes = regionData.properties[partyId] || 0;
-    const result = Math.round((partyVotes / regionData.properties.hlasy_platne) * 1000) / 10;
-    let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.nazob}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.hlasy_platne} platných hlasů)`;
-    if (typeof regionData.properties.hlasy_platne === 'undefined') {
+    const result = Math.round((partyVotes / regionData.properties.PLATNE_HLASY) * 1000) / 10;
+    let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.Obec}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.PLATNE_HLASY} platných hlasů)`;
+    if (typeof regionData.properties.ODEVZDANE_OBALKY === 'undefined') {
       text = 'Okrsek zatím není sečtený.<br>&nbsp';
     }
     return text;
@@ -202,7 +205,7 @@ class PartySelector {
 
   createOption(partyId) {
     const option = document.createElement('option');
-    option.innerHTML = getPartyLongName(partyId);
+    option.innerHTML = partyId.replace('HL_', '');
     option.value = partyId;
     return option;
   }
@@ -222,10 +225,11 @@ class PartySelector {
     const selector = document.createElement('select');
     const option = this.createOption(attendanceId);
     selector.appendChild(option);
-    for (const partyId in parties) {
+    Object.keys(breaks).forEach((partyId) => {
       const opt = this.createOption(partyId);
       selector.appendChild(opt);
-    }
+    });
+
     this.container.appendChild(selector);
     this.addEvents(selector);
     selector.value = this.selected; // change default party to selected party
