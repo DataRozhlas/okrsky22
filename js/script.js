@@ -122,6 +122,7 @@ class Map {
       this.legend.update(regionData, this.selector.selected);
     });
     this.map.on('click', (e) => {
+      if (screen.width <= 480) { return; } // interakce na mobilu
       const data = this.map.queryRenderedFeatures(e.point, { layers: ['map'] });
       const regionData = data.length === 0 ? null : data[0];
       if (regionData !== null) {
@@ -184,6 +185,9 @@ class MapLegend {
     // accuracy to one decimal place
     const attendance = Math.round((regionData.properties.ODEVZDANE_OBALKY / regionData.properties.ZAPSANI_VOLICI) * 1000) / 10 || 0;
     let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.Obec}</b><br><b>${attendance} %</b> (${regionData.properties.ODEVZDANE_OBALKY} z ${regionData.properties.ZAPSANI_VOLICI} zapsaných voličů)`;
+    if (screen.width <= 480) { 
+      text += ` <a target="_blank" href="https://www.irozhlas.cz/volby/komunalni-volby-2022/${regionData.properties.KODZASTUP}">detail</a>`;
+    }
     if (typeof regionData.properties.PLATNE_HLASY === 'undefined') {
       text = 'Okrsek zatím není sečtený.<br>&nbsp';
     }
@@ -195,6 +199,9 @@ class MapLegend {
     const partyVotes = regionData.properties[partyId] || 0;
     const result = Math.round((partyVotes / regionData.properties.PLATNE_HLASY) * 1000) / 10;
     let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.Obec}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.PLATNE_HLASY} platných hlasů)`;
+    if (screen.width <= 480) { 
+      text += ` <a target="_blank" href="https://www.irozhlas.cz/volby/komunalni-volby-2022/${regionData.properties.KODZASTUP}">detail</a>`;
+    }
     if (typeof regionData.properties.ODEVZDANE_OBALKY === 'undefined') {
       text = 'Okrsek zatím není sečtený.<br>&nbsp';
     }
