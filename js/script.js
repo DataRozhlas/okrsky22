@@ -308,7 +308,7 @@ class Gcoder {
       if (x < 12 || x > 19 || y < 48 || y > 52) { // limit coordinates to CR only (approximately)
         map.fitBounds(crBounds);
       } else {
-        this._map.flyTo({ center: [x, y], zoom: 12 });
+        this._map.flyTo({ center: [x, y], zoom: 11 });
       }
     }
   }
