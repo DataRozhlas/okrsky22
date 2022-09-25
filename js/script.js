@@ -7,6 +7,9 @@ import {
 } from './style'; // import stylu
 // import { parties, getPartyShortName, getPartyLongName } from './parties'; // list of all parties
 import { breaks } from './breaks';
+import { numnuts } from './nuts';
+
+console.log(numnuts)
 
 // class identifiers in html
 const mapClass = 'map';
@@ -126,7 +129,7 @@ class Map {
       const data = this.map.queryRenderedFeatures(e.point, { layers: ['map'] });
       const regionData = data.length === 0 ? null : data[0];
       if (regionData !== null) {
-        window.open('https://www.irozhlas.cz/volby/komunalni-volby-2022/' + regionData.properties.KODZASTUP, '_blank').focus();
+        window.open(`https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=1&xdz=7&xnumnuts=${numnuts[regionData.properties.KODZASTUP]}&xobec=${regionData.properties.KODZASTUP}&xokrsek=${regionData.properties.okid.split('_')[1]}&xstat=0&xvyber=1`, '_blank').focus();
       }
     });
   }
@@ -186,7 +189,7 @@ class MapLegend {
     const attendance = Math.round((regionData.properties.ODEVZDANE_OBALKY / regionData.properties.ZAPSANI_VOLICI) * 1000) / 10 || 0;
     let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.Obec}</b><br><b>${attendance} %</b> (${regionData.properties.ODEVZDANE_OBALKY} z ${regionData.properties.ZAPSANI_VOLICI} zapsaných voličů)`;
     if (screen.width <= 480) { 
-      text += ` <a target="_blank" href="https://www.irozhlas.cz/volby/komunalni-volby-2022/${regionData.properties.KODZASTUP}">detail</a>`;
+      text += ` <a target="_blank" href="https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=1&xdz=7&xnumnuts=${numnuts[regionData.properties.KODZASTUP]}&xobec=${regionData.properties.KODZASTUP}&xokrsek=${regionData.properties.okid.split('_')[1]}&xstat=0&xvyber=1">detail</a>`;
     }
     if (typeof regionData.properties.PLATNE_HLASY === 'undefined') {
       text = 'Okrsek zatím není sečtený.<br>&nbsp';
@@ -200,7 +203,7 @@ class MapLegend {
     const result = Math.round((partyVotes / regionData.properties.PLATNE_HLASY) * 1000) / 10;
     let text = `<b>Okrsek č. ${regionData.properties.Cislo} | ${regionData.properties.Obec}</b><br><b>${result} %</b> (${partyVotes} z ${regionData.properties.PLATNE_HLASY} platných hlasů)`;
     if (screen.width <= 480) { 
-      text += ` <a target="_blank" href="https://www.irozhlas.cz/volby/komunalni-volby-2022/${regionData.properties.KODZASTUP}">detail</a>`;
+      text += ` <a target="_blank" href="https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=1&xdz=7&xnumnuts=${numnuts[regionData.properties.KODZASTUP]}&xobec=${regionData.properties.KODZASTUP}&xokrsek=${regionData.properties.okid.split('_')[1]}&xstat=0&xvyber=1">detail</a>`;
     }
     if (typeof regionData.properties.ODEVZDANE_OBALKY === 'undefined') {
       text = 'Okrsek zatím není sečtený.<br>&nbsp';
