@@ -23,7 +23,7 @@ proxies = {
     'http': 'http://3.74.182.134:8888'
 }
 data = pd.DataFrame()
-for i in range(1, 149): #148
+for i in range(1, 153): #152 max
     print(i)
     r = requests.get('http://194.149.101.118/pls/kvmedia/vysledky_okrsky?davka=' + str(i))
     root = ET.fromstring(r.text)
