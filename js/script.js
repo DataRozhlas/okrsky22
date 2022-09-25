@@ -121,6 +121,13 @@ class Map {
       const regionData = data.length === 0 ? null : data[0];
       this.legend.update(regionData, this.selector.selected);
     });
+    this.map.on('click', (e) => {
+      const data = this.map.queryRenderedFeatures(e.point, { layers: ['map'] });
+      const regionData = data.length === 0 ? null : data[0];
+      if (regionData !== null) {
+        window.open('https://www.irozhlas.cz/volby/komunalni-volby-2022/' + regionData.properties.KODZASTUP, '_blank').focus();
+      }
+    });
   }
 
   createLegend() {
@@ -205,7 +212,7 @@ class PartySelector {
 
   createOption(partyId) {
     const option = document.createElement('option');
-    option.innerHTML = partyId.replace('HL_', '');
+    option.innerHTML = partyId.replace('HL_', '').replace('UCAST', 'Účast');
     option.value = partyId;
     return option;
   }
@@ -226,6 +233,7 @@ class PartySelector {
     const option = this.createOption(attendanceId);
     selector.appendChild(option);
     Object.keys(breaks).forEach((partyId) => {
+      if (partyId === 'UCAST') { return; }
       const opt = this.createOption(partyId);
       selector.appendChild(opt);
     });

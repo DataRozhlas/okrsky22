@@ -23,9 +23,9 @@ proxies = {
     'http': 'http://3.74.182.134:8888'
 }
 data = pd.DataFrame()
-for i in range(1, 10): #172
+for i in range(1, 149): #148
     print(i)
-    r = requests.get('http://194.149.101.118/pls/kvmedia/vysledky_okrsky?davka=' + str(i), proxies=proxies)
+    r = requests.get('http://194.149.101.118/pls/kvmedia/vysledky_okrsky?davka=' + str(i))
     root = ET.fromstring(r.text)
     for okr in root.findall(ns + 'OKRSEK'):
         tmp = okr.attrib
