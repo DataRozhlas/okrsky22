@@ -5,11 +5,8 @@
 import {
   staticStyleUrl, getMapLayerStyle, basicColors, partyColors,
 } from './style'; // import stylu
-// import { parties, getPartyShortName, getPartyLongName } from './parties'; // list of all parties
 import { breaks } from './breaks';
 import { numnuts } from './nuts';
-
-console.log(numnuts)
 
 // class identifiers in html
 const mapClass = 'map';
@@ -57,12 +54,12 @@ class Map {
       style: staticStyleUrl, // imported style
       zoom: this.zoom,
       center: [this.centerLng, this.centerLat],
-      maxZoom: 15, // ToDo: remove constant
+      maxZoom: 14, // ToDo: remove constant
       attributionControl: false,
     });
 
     this.map.addControl(new maplibregl.AttributionControl({
-      customAttribution: 'data <a target="_blank" href="https://volby.cz/">ČSÚ</a>',
+      customAttribution: 'data <a target="_blank" href="https://volby.cz/">ČSÚ</a>, geocoder <a target="_blank" href="https://mapy.cz/">Mapy.cz</a>',
     }));
 
     if (this.centerLng === '') {
@@ -104,7 +101,7 @@ class Map {
       'source-layer': 'map',
       paint: {
         'fill-color': getMapLayerStyle(this.selectedParty),
-        'fill-opacity': 0.8,
+        'fill-opacity': 0.6,
         'fill-outline-color': 'hsla(0, 0%, 52%, 0.4)',
       },
     });
@@ -128,7 +125,6 @@ class Map {
       if (screen.width <= 480) { return; } // interakce na mobilu
       const data = this.map.queryRenderedFeatures(e.point, { layers: ['map'] });
       const regionData = data.length === 0 ? null : data[0];
-      console.log(regionData.properties)
       if (regionData !== null) {
         window.open(`https://www.volby.cz/pls/kv2022/kv1111?xjazyk=CZ&xid=1&xdz=7&xnumnuts=${numnuts[regionData.properties.KODZASTUP]}&xobec=${regionData.properties.okid.split('_')[0]}&xokrsek=${regionData.properties.okid.split('_')[1]}&xstat=0&xvyber=1`, '_blank').focus();
       }
@@ -319,7 +315,7 @@ class Gcoder {
       if (x < 12 || x > 19 || y < 48 || y > 52) { // limit coordinates to CR only (approximately)
         map.fitBounds(crBounds);
       } else {
-        this._map.flyTo({ center: [x, y], zoom: 11 });
+        this._map.flyTo({ center: [x, y], zoom: 12 });
       }
     }
   }

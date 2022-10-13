@@ -30,7 +30,7 @@ for i in range(1, 153): #152 max
     for okr in root.findall(ns + 'OKRSEK'):
         tmp = okr.attrib
         tmp.update(okr.find(ns + 'UCAST_OKRSEK').attrib)
-        tmp.update({'HL_Ostatní': 0})
+        #tmp.update({'HL_Ostatní': 0})
         for part in okr.findall(ns + 'HLASY_OKRSEK'):
             pid = okr.get('KODZASTUP') + '_' + okr.get('CIS_OBVODU') + '_' + part.get('POR_STR_HLAS_LIST')
             if pid in kvr.keys():
